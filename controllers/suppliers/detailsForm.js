@@ -7,6 +7,10 @@ const detailsForm=async(req,res)=>{
                         return res.json({success:false, msg:'send all fields'});
                 }
                 // console.log(req.user.id);
+                const existingSupplier = await Supplier.findOne({ registration_number: registration });
+                if (existingSupplier) {
+                    return res.json({ success: false, msg: 'Supplier with this registration number already exists' });
+                }
                 const id=req.user.id;
                 const updated_suppier=await Supplier.findByIdAndUpdate(id,{owner_name,company_name,business_name,registration_number:registration,website,tax_image:tax,isvarified:'pending'});
                 if(!updated_suppier){
